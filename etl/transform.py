@@ -6,13 +6,13 @@ import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(script_dir))
 
-from config.config import GAME_NAME_TANKTOP
-
 class DataTransformer():
     def __init__(self, parquet_file_name='raw_match_details.parquet', data_folder_name='data'):
         # Path to the data folder
         self.data_folder_path = os.path.join(script_dir, data_folder_name)
         self.parquet_file_path = os.path.join(self.data_folder_path, parquet_file_name)
+        self.transformed_parquet_file_name = 'transformed_match_details.parquet'
+        self.transformed_parquet_file_path = os.path.join(self.data_folder_path, self.transformed_parquet_file_name)
 
     def load_parquet(self):
         try:
@@ -41,9 +41,46 @@ class DataTransformer():
         # Add the indices as a new column in the DataFrame
         df['player_index'] = indices
 
-        # Print the DataFrame to check the result
-        print("Data transformation complete.")
-        return df
+        # Choose column names in "Info" and identify player's data using "player_index"
+        transformed_df = df.copy()
+
+        # Extract player_data for each row
+        transformed_df['player_data'] = transformed_df.apply(lambda row: row['info']['participants'][row['player_index']], axis=1)
+        
+        # Add columns
+        transformed_df['assists'] = transformed_df['player_data'].apply(lambda x: x['assists'])
+        transformed_df['ability_uses'] = transformed_df['player_data'].apply(lambda x: x['challenges']['abilityUses'])
+        transformed_df['damage_per_minute'] = transformed_df['player_data'].apply(lambda x: x['challenges']['damagePerMinute'])
+        transformed_df['damage_taken_on_team_percentage'] = transformed_df['player_data'].apply(lambda x: x['challenges']['damageTakenOnTeamPercentage'])
+        transformed_df['effective_healing_and_shielding'] = transformed_df['player_data'].apply(lambda x: x['challenges']['effectiveHealAndShielding'])
+        transformed_df['game_length'] = transformed_df['player_data'].apply(lambda x: x['challenges']['gameLength'])
+        transformed_df['gold_per_minute'] = transformed_df['player_data'].apply(lambda x: x['challenges']['goldPerMinute'])
+        transformed_df['kda'] = transformed_df['player_data'].apply(lambda x: x['challenges']['kda'])
+        transformed_df['kill_participation'] = transformed_df['player_data'].apply(lambda x: x['challenges']['killParticipation'])
+        transformed_df['killing_spree'] = transformed_df['player_data'].apply(lambda x: x['challenges']['killingSprees'])
+        transformed_df['team_damage_percentage'] = transformed_df['player_data'].apply(lambda x: x['challenges']['teamDamagePercentage'])
+        transformed_df['champion_name'] = transformed_df['player_data'].apply(lambda x: x['championName'])
+        transformed_df['deaths'] = transformed_df['player_data'].apply(lambda x: x['deaths'])
+        transformed_df['gold_earned'] = transformed_df['player_data'].apply(lambda x: x['goldEarned'])
+        transformed_df['gold_spent'] = transformed_df['player_data'].apply(lambda x: x['goldSpent'])
+        transformed_df['kills'] = transformed_df['player_data'].apply(lambda x: x['kills'])
+        transformed_df['time_played'] = transformed_df['player_data'].apply(lambda x: x['timePlayed'])
+        transformed_df['total_damage_dealt'] = transformed_df['player_data'].apply(lambda x: x['totalDamageDealt'])
+        transformed_df['total_damage_taken'] = transformed_df['player_data'].apply(lambda x: x['totalDamageTaken'])
+        transformed_df['win'] = transformed_df['player_data'].apply(lambda x: x['win'])
+
+        # Save the transformed DataFrame to a Parquet file
+        save_transformed_df = transformed_df.copy()
+        save_transformed_df = save_transformed_df.drop(columns=['metadata', 'info'])
+
+
+        try:
+            save_transformed_df.to_parquet(self.transformed_parquet_file_path, index=False)
+            print(f"\nTransformed data saved to {self.transformed_parquet_file_path}\n")
+        except Exception as e:
+            print(f"\nError saving transformed data: {e}")
+
+        return save_transformed_df
         
 if __name__ == "__main__":
     transformer = DataTransformer()
