@@ -41,14 +41,3 @@ class Extract:
 
         return puuid, match_details_list
     
-    def save_to_parquet(self, data, file_path):
-        # Ensure data folder exists
-        data_folder = os.path.join(os.path.dirname(__file__), 'data')
-        if not os.path.exists(data_folder):
-            os.makedirs(data_folder)
-
-        # Convert the list of match details to a DataFrame
-        df = pd.DataFrame(data)
-        # Save the DataFrame to a Parquet file
-        parquet_file_path = os.path.join(data_folder, file_path)
-        df.to_parquet(parquet_file_path, index=False)
