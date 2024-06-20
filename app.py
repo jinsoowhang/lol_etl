@@ -11,7 +11,12 @@ st.title("""This is Unchained Visualization""")
 st.divider()
 
 st.markdown(f"## Who's the real carry?")
-st.bar_chart(df, x='puuid', y='total_damage_dealt')
+select_name = st.multiselect("Select names", df['summoner_name'].unique().tolist(), key='names')
+
+if select_name:
+    filtered_df = df[df['summoner_name'].isin(select_name)]
+    st.bar_chart(filtered_df, x='game_date', y='total_damage_dealt', color='summoner_name')
+
 
 st.divider()
 
