@@ -1,6 +1,7 @@
 import pandas as pd
 import os 
 import sys
+from datetime import datetime
 
 # Directory where the script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -47,9 +48,11 @@ class DataTransformer():
         transformed_df = df.copy()
 
         # Extract player_data for each row
-        transformed_df['player_data'] = transformed_df.apply(lambda row: row['info']['participants'][row['player_index']], axis=1)
+        transformed_df['player_data'] = transformed_df.apply(lambda x: x['info']['participants'][x['player_index']], axis=1)
         
         # Add columns
+        transformed_df['game_mode'] = transformed_df.apply(lambda x: x['info']['gameMode'], axis=1)
+        transformed_df['game_date'] = transformed_df.apply(lambda x: datetime.fromtimestamp(x['info']['gameCreation']/1000), axis=1)
         transformed_df['assists'] = transformed_df['player_data'].apply(lambda x: x['assists'])
         transformed_df['ability_uses'] = transformed_df['player_data'].apply(lambda x: x['challenges']['abilityUses'])
         transformed_df['damage_per_minute'] = transformed_df['player_data'].apply(lambda x: x['challenges']['damagePerMinute'])

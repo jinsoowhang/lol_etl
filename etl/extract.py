@@ -32,6 +32,7 @@ class Extract:
             match_details = match_fetcher.get_match_details()
             if match_details:
                 match_details['puuid'] = puuid  # Add PUUID to match details
+                match_details['summoner_name'] = self.game_name
                 match_details_list.append(match_details)
             else:
                 print(f"Failed to fetch details for match_id: {match_id}")
