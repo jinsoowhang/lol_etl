@@ -19,7 +19,7 @@ class DataTransformer():
     def load_parquet(self):
         try:
             raw_match_details_df = pd.read_parquet(self.parquet_file_path)
-            print(f"\nData loaded from {self.parquet_file_path}")
+            print(f"\nRaw data loaded from {self.parquet_file_name} in 'etl/data' folder")
             return raw_match_details_df
         except Exception as e:
             print(f"Error loading Parquet file: {e}")
@@ -82,7 +82,7 @@ class DataTransformer():
                 save_transformed_df = pd.concat([existing_df, save_transformed_df]).drop_duplicates().reset_index(drop=True)
             
             save_transformed_df.to_parquet(self.transformed_parquet_file_path, index=False)
-            print(f"\nTransformed data saved to {self.transformed_parquet_file_path}\n")
+            print(f"\nTransformed data saved to {self.transformed_parquet_file_name} in 'etl/data' folder\n")
         except Exception as e:
             print(f"\nError saving transformed data: {e}")
 

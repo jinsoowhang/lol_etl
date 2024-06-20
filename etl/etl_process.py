@@ -44,7 +44,7 @@ class ETLProcess:
         if puuid and match_details_list:
             extracted_file_path = f"raw_match_details_{game_name}.parquet"
             self.save_to_parquet(match_details_list, extracted_file_path)
-            print(f"Data saved to {extracted_file_path} in 'etl/data' folder")
+            print(f"Raw data saved to {extracted_file_path} in 'etl/data' folder")
         else:
             print(f"Failed to extract data for {game_name}")
 
