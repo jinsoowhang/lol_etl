@@ -7,12 +7,14 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(script_dir))
 
 class DataTransformer():
-    def __init__(self, parquet_file_name='raw_match_details.parquet', data_folder_name='data'):
+    def __init__(self, game_name, data_folder_name='data'):
+        self.game_name = game_name
         # Path to the data folder
         self.data_folder_path = os.path.join(script_dir, data_folder_name)
-        self.parquet_file_path = os.path.join(self.data_folder_path, parquet_file_name)
         self.transformed_parquet_file_name = 'transformed_match_details.parquet'
         self.transformed_parquet_file_path = os.path.join(self.data_folder_path, self.transformed_parquet_file_name)
+        self.parquet_file_name = f'raw_match_details_{self.game_name}.parquet'
+        self.parquet_file_path = os.path.join(self.data_folder_path, self.parquet_file_name)
 
     def load_parquet(self):
         try:
@@ -71,9 +73,14 @@ class DataTransformer():
 
         # Save the transformed DataFrame to a Parquet file
         save_transformed_df = transformed_df.copy()
-        save_transformed_df = save_transformed_df.drop(columns=['metadata', 'info'])
+        save_transformed_df = save_transformed_df.drop(columns=['metadata', 'info', 'player_data'])
 
         try:
+            # Load existing transformed data
+            if os.path.exists(self.transformed_parquet_file_path):
+                existing_df = pd.read_parquet(self.transformed_parquet_file_path)
+                save_transformed_df = pd.concat([existing_df, save_transformed_df]).drop_duplicates().reset_index(drop=True)
+            
             save_transformed_df.to_parquet(self.transformed_parquet_file_path, index=False)
             print(f"\nTransformed data saved to {self.transformed_parquet_file_path}\n")
         except Exception as e:
