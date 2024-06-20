@@ -10,10 +10,6 @@ from api.summoners import Summoner
 from api.match_id import MatchID
 from api.match import Match
 
-# Riot ID details
-GAME_NAME_TANKTOP = "TanktopMastr"
-TAG_LINE_TANKTOP = "NA1"
-
 class Extract:
     def __init__(self, game_name, tag_line):
         self.game_name = game_name
@@ -29,6 +25,7 @@ class Extract:
         match_ids = match_id_fetcher.get_match_ids()
 
         # Step 3: Get match details and include PUUID
+        print(f'\nExtracting data for {self.game_name}\n')
         match_details_list = []
         for match_id in match_ids:
             match_fetcher = Match(match_id)

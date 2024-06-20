@@ -44,21 +44,17 @@ class ETLProcess:
         if puuid and match_details_list:
             extracted_file_path = f"raw_match_details_{game_name}.parquet"
             self.save_to_parquet(match_details_list, extracted_file_path)
-            print(f"Data saved to {extracted_file_path} in 'etl/data' folder")
+            print(f"Raw data saved to {extracted_file_path} in 'etl/data' folder")
         else:
             print(f"Failed to extract data for {game_name}")
 
         # Step 2: Transform data
-        transformer = DataTransformer()
+        transformer = DataTransformer(game_name)
         raw_match_details_df = transformer.load_parquet()
 
         if raw_match_details_df is not None:
             transformed_file_path = f"transformed_match_details_{game_name}.parquet"
             transformed_df = transformer.transform_data(raw_match_details_df)
-            self.save_to_parquet(transformed_df, transformed_file_path)
-            print(f"Data saved to {transformed_file_path} in 'etl/data' folder\n")
-        else:
-            print(f"Failed to load the raw match details for {game_name}")
 
         # # Step 3: Load data
         # loader = Load()
