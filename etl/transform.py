@@ -50,7 +50,7 @@ class DataTransformer():
         # Extract player_data for each row
         transformed_df['player_data'] = transformed_df.apply(lambda x: x['info']['participants'][x['player_index']], axis=1)
         
-        # Add columns
+        # Add existing columns from League of Legends API
         transformed_df['game_mode'] = transformed_df.apply(lambda x: x['info']['gameMode'], axis=1)
         transformed_df['game_date'] = transformed_df.apply(lambda x: datetime.fromtimestamp(x['info']['gameCreation']/1000), axis=1)
         transformed_df['assists'] = transformed_df['player_data'].apply(lambda x: x['assists'])
