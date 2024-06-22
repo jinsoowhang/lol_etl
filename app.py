@@ -30,14 +30,21 @@ st.divider()
 
 # Variables
 test_df = df.copy()
-test_df = test_df.sort_values(by=['summoner_name', 'game_date'])
+test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, False])
 test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1 
+test_df = test_df[test_df['row_id'] <= 20]
 test_df['row_id'] = test_df['row_id'].astype(str)
-test_df['cumsum_wins'] = df.sort_values(by=['game_date']).groupby('summoner_name')['win'].cumsum()
+test_df['cumsum_wins'] = df.sort_values(by=['game_date'], ascending=False).groupby('summoner_name')['win'].cumsum()
+
+# Filter by Summoner's games
 tanktopmastr_df = test_df[test_df['summoner_name'] == 'TanktopMastr']
 velbri_df = test_df[test_df['summoner_name'] == 'Velbri']
 camachbro_df = test_df[test_df['summoner_name'] == 'Camachbro']
+
+# Rank for each Summoner
 rank_over_past_games = test_df.groupby(['summoner_name'], as_index=False)['cumsum_wins'].max().sort_values(by='cumsum_wins', ascending=False)
+
+# Image Folder Path
 image_folder_path = 'etl/images'
 
 st.markdown('## 🏆Wins over the past 20 games')
