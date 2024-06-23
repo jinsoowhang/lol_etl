@@ -51,6 +51,7 @@ class DataTransformer():
         transformed_df['player_data'] = transformed_df.apply(lambda x: x['info']['participants'][x['player_index']], axis=1)
         
         # Add existing columns from League of Legends API
+        transformed_df['match_id'] = transformed_df.apply(lambda x: x['metadata']['matchId'], axis=1)
         transformed_df['game_mode'] = transformed_df.apply(lambda x: x['info']['gameMode'], axis=1)
         transformed_df['game_date'] = transformed_df.apply(lambda x: datetime.fromtimestamp(x['info']['gameCreation']/1000), axis=1)
         transformed_df['assists'] = transformed_df['player_data'].apply(lambda x: x['assists'])
@@ -76,7 +77,7 @@ class DataTransformer():
 
         # Save the transformed DataFrame to a Parquet file
         save_transformed_df = transformed_df.copy()
-        save_transformed_df = save_transformed_df.drop(columns=['metadata', 'info', 'player_data'])
+        save_transformed_df = save_transformed_df.drop(columns=['puuid', 'metadata', 'info', 'player_data'])
 
         try:
             # Load existing transformed data

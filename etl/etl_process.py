@@ -24,6 +24,7 @@ class ETLProcess:
 
         # Convert the list of match details to a DataFrame
         df = pd.DataFrame(data)
+
         # Save the DataFrame to a Parquet file
         parquet_file_path = os.path.join(data_folder, file_path)
         df.to_parquet(parquet_file_path, index=False)
@@ -55,10 +56,6 @@ class ETLProcess:
         if raw_match_details_df is not None:
             transformed_file_path = f"transformed_match_details_{game_name}.parquet"
             transformed_df = transformer.transform_data(raw_match_details_df)
-
-        # # Step 3: Load data
-        # loader = Load()
-        # loader.load_data(transformed_data)
 
     def run(self):
         for game_name in self.game_names:
