@@ -11,8 +11,15 @@ p1 = st.Page(
     icon="📈"
     )
 
+p2 = st.Page(
+    "pages/about.py",
+    title = "About",
+    icon="📙"
+    )
+
 pg = st.navigation({
-    "Metrics": [p1]
+    "Metrics": [p1],
+    "Info": [p2]
 })
 
 pg.run()
