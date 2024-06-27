@@ -4,7 +4,7 @@
 
 This is my data project, where I extracted League of Legends game data from the Riot Games API and visualized it using Streamlit.
 
-![dashboard](/assets/images/dashboard.PNG)
+![dashboard](/assets/images/about.PNG)
 
 ---
 
