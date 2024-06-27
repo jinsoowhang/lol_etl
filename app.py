@@ -8,18 +8,24 @@ import altair as alt
 p1 = st.Page(
     "pages/past_20_games.py",
     title = "Trends over past 20 Games",
-    icon="📈"
-    )
+    icon = "📈"
+)
 
 p2 = st.Page(
+    "pages/metric_arena.py",
+    title = "Metric Arena",
+    icon = "🏟️"
+)
+
+p3 = st.Page(
     "pages/about.py",
     title = "About",
-    icon="📙"
+    icon = "📙"
     )
 
 pg = st.navigation({
-    "Metrics": [p1],
-    "Info": [p2]
+    "Metrics": [p1, p2],
+    "Info": [p3]
 })
 
 pg.run()
