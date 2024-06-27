@@ -12,7 +12,7 @@ parquet_file_path = 'etl/data/transformed_match_details.parquet'
 df = pd.read_parquet(parquet_file_path)
 
 # Image Folder Path
-image_folder_path = 'etl/images'
+image_folder_path = 'assets/images'
 
 # UDF
 def resize_images(image_path, width, height):
@@ -43,8 +43,8 @@ tanktopmastr_df = test_df[test_df['summoner_name'] == 'TanktopMastr']
 velbri_df = test_df[test_df['summoner_name'] == 'Velbri']
 camachbro_df = test_df[test_df['summoner_name'] == 'Camachbro']
 
-# Title
-st.title("""⛓️‍💥Unchained Metrics""")
+# Title page 
+st.title("""⛓️📈Unchained Metrics""")
 st.text(f"Updated as of {df['game_date'].max().strftime('%Y-%m-%d')}")
 
 st.divider()
