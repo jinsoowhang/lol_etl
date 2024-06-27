@@ -12,7 +12,7 @@ parquet_file_path = 'etl/data/transformed_match_details.parquet'
 df = pd.read_parquet(parquet_file_path)
 
 # Image Folder Path
-image_folder_path = 'etl/images'
+image_folder_path = 'assets/images'
 
 # UDF
 def resize_images(image_path, width, height):
