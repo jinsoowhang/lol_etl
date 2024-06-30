@@ -5,10 +5,16 @@ from datetime import datetime
 
 # Directory where the script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(script_dir))
+
+# Add the project root directory to the Python path
+project_root = os.path.join(script_dir, '..')
+sys.path.append(project_root)
+
+from api.custom_logging.custom_logger import CustomLogger
 
 class DataTransformer():
     def __init__(self, game_name, data_folder_name='data'):
+        self.log = CustomLogger('DataTransformLogger').get_logger()
         self.game_name = game_name
         # Path to the data folder
         self.data_folder_path = os.path.join(script_dir, data_folder_name)
@@ -20,10 +26,10 @@ class DataTransformer():
     def load_parquet(self):
         try:
             raw_match_details_df = pd.read_parquet(self.parquet_file_path)
-            print(f"\nRaw data loaded from {self.parquet_file_name} in 'etl/data' folder")
+            self.log.info(f"Raw data loaded from {self.parquet_file_name} in 'etl/data' folder")
             return raw_match_details_df
         except Exception as e:
-            print(f"Error loading Parquet file: {e}")
+            self.log.error(f"Error loading Parquet file: {e}")
             return None
         
     def transform_data(self, df):
@@ -86,8 +92,8 @@ class DataTransformer():
                 save_transformed_df = pd.concat([existing_df, save_transformed_df]).drop_duplicates().reset_index(drop=True)
             
             save_transformed_df.to_parquet(self.transformed_parquet_file_path, index=False)
-            print(f"\nTransformed data saved to {self.transformed_parquet_file_name} in 'etl/data' folder\n")
+            self.log.info(f"Transformed data saved to {self.transformed_parquet_file_name} in 'etl/data' folder\n")
         except Exception as e:
-            print(f"\nError saving transformed data: {e}")
+            self.log.error(f"\nError saving transformed data: {e}")
 
         return save_transformed_df
