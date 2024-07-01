@@ -4,10 +4,10 @@ import sys
 from datetime import datetime
 
 # Directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Add the project root directory to the Python path
-project_root = os.path.join(script_dir, '..')
+project_root = os.path.join(SCRIPT_DIR, '..')
 sys.path.append(project_root)
 
 from api.custom_logging.custom_logger import CustomLogger
@@ -17,7 +17,7 @@ class DataTransformer():
         self.log = CustomLogger('DataTransformLogger').get_logger()
         self.game_name = game_name
         # Path to the data folder
-        self.data_folder_path = os.path.join(script_dir, data_folder_name)
+        self.data_folder_path = os.path.join(SCRIPT_DIR, data_folder_name)
         self.transformed_parquet_file_name = 'transformed_match_details.parquet'
         self.transformed_parquet_file_path = os.path.join(self.data_folder_path, self.transformed_parquet_file_name)
         self.parquet_file_name = f'raw_match_details_{self.game_name}.parquet'
@@ -26,7 +26,7 @@ class DataTransformer():
     def load_parquet(self):
         try:
             raw_match_details_df = pd.read_parquet(self.parquet_file_path)
-            self.log.info(f"Raw data loaded from {self.parquet_file_name} in 'etl/data' folder")
+            self.log.info(f"\nRaw data loaded from {self.parquet_file_name} in 'etl/data' folder\n")
             return raw_match_details_df
         except Exception as e:
             self.log.error(f"Error loading Parquet file: {e}")
@@ -92,7 +92,7 @@ class DataTransformer():
                 save_transformed_df = pd.concat([existing_df, save_transformed_df]).drop_duplicates().reset_index(drop=True)
             
             save_transformed_df.to_parquet(self.transformed_parquet_file_path, index=False)
-            self.log.info(f"Transformed data saved to {self.transformed_parquet_file_name} in 'etl/data' folder\n")
+            self.log.info(f"\nTransformed data saved to {self.transformed_parquet_file_name} in 'etl/data' folder\n")
         except Exception as e:
             self.log.error(f"\nError saving transformed data: {e}")
 
