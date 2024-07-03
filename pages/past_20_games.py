@@ -23,15 +23,16 @@ def resize_images(image_path, width, height):
 
 # Variables
 test_df = df.copy()
-test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, False])
+test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, True])
 
 # Row ID
-test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1 
-test_df = test_df[test_df['row_id'] <= 20]
+test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1
+test_df = test_df.groupby('summoner_name').tail(20).sort_values(by='game_date')
+test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1
 test_df['row_id'] = test_df['row_id'].astype(str)
 
 # Cumulative Wins
-test_df['cumsum_wins'] = df.sort_values(by=['game_date'], ascending=False).groupby('summoner_name')['win'].cumsum()
+test_df['cumsum_wins'] = test_df.groupby('summoner_name')['win'].cumsum()
 
 # Convert Time Played to Minutes and Calculate Cumulative Time Played
 test_df['time_played'] = test_df['time_played'] / 3600
@@ -92,6 +93,9 @@ fig, ax = plt.subplots()
 ax.plot(tanktopmastr_df['row_id'], tanktopmastr_df['cumsum_wins'], marker='o', label='TanktopMastr')
 ax.plot(velbri_df['row_id'], velbri_df['cumsum_wins'], marker='x', label='Velbri')
 ax.plot(camachbro_df['row_id'], camachbro_df['cumsum_wins'], marker='s', label='Camachbro')
+
+# Reverse the x-axis
+ax.invert_xaxis()
 
 # Set plot labels and title
 ax.set_xlabel('Game Number')
