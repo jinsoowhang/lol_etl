@@ -6,15 +6,15 @@ import altair as alt
 
 # Navigation
 p1 = st.Page(
-    "pages/past_20_games.py",
-    title = "Trends over past 20 Games",
-    icon = "📈"
-)
-
-p2 = st.Page(
     "pages/metric_arena.py",
     title = "Metric Arena",
     icon = "🏟️"
+)
+
+p2 = st.Page(
+    "pages/past_20_games.py",
+    title = "Trends over past 20 Games",
+    icon = "📈"
 )
 
 p3 = st.Page(
