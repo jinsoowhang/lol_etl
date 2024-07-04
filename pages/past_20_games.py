@@ -44,15 +44,6 @@ tanktopmastr_df = test_df[test_df['summoner_name'] == 'TanktopMastr']
 velbri_df = test_df[test_df['summoner_name'] == 'Velbri']
 camachbro_df = test_df[test_df['summoner_name'] == 'Camachbro']
 
-###########################
-####### Title Page ########
-###########################
-
-st.title("""⛓️📈Unchained Metrics""")
-st.text(f"Updated as of {df['game_date'].max().strftime('%Y-%m-%d')}")
-
-st.divider()
-
 ############################################
 ####### Wins over the past 20 games ########
 ############################################
