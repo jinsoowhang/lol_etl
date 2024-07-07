@@ -26,8 +26,7 @@ test_df = df.copy()
 test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, True])
 
 # Row ID
-test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1
-test_df = test_df.groupby('summoner_name').tail(20).sort_values(by='game_date')
+test_df = test_df.groupby('summoner_name').tail(20).sort_values(by=['summoner_name', 'game_date'])
 test_df['row_id'] = test_df.groupby('summoner_name').cumcount() + 1
 test_df['row_id'] = test_df['row_id'].astype(str)
 
@@ -36,8 +35,8 @@ test_df['cumsum_wins'] = test_df.groupby('summoner_name')['win'].cumsum()
 
 # Convert Time Played to Minutes and Calculate Cumulative Time Played
 test_df['time_played'] = test_df['time_played'] / 3600
-test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, False])
 test_df['cumsum_time_played'] = test_df.groupby('summoner_name')['time_played'].cumsum()
+test_df = test_df.sort_values(by=['summoner_name', 'game_date'], ascending=[True, False])
 
 # Filter by Summoner's games
 tanktopmastr_df = test_df[test_df['summoner_name'] == 'TanktopMastr']
@@ -55,7 +54,6 @@ st.write("") # Spacing
 
 # Rank for each Summoner
 rank_cumsum_wins = test_df.groupby(['summoner_name'], as_index=False)['cumsum_wins'].max().sort_values(by='cumsum_wins', ascending=False)
-
 
 # Rank
 col1, col2, col3 = st.columns(3)
@@ -142,6 +140,9 @@ fig, ax = plt.subplots()
 ax.plot(tanktopmastr_df['row_id'], tanktopmastr_df['cumsum_time_played'], marker='o', label='TanktopMastr')
 ax.plot(velbri_df['row_id'], velbri_df['cumsum_time_played'], marker='x', label='Velbri')
 ax.plot(camachbro_df['row_id'], camachbro_df['cumsum_time_played'], marker='s', label='Camachbro')
+
+# Reverse the x-axis
+ax.invert_xaxis()
 
 # Set plot labels and title
 ax.set_xlabel('Game Number')
