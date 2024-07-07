@@ -48,6 +48,12 @@ chosen_metric = chosen_metric.replace(' ', '_').lower()
 # Rank for each Summoner
 rank_by_metric = df.groupby(['summoner_name'], as_index=False)[chosen_metric].mean().sort_values(by=chosen_metric, ascending=False)
 
+# Changing order for descending ordered columns
+descending_order_cols = ['game_length', 'deaths', 'time_played']
+print(chosen_metric)
+if chosen_metric in descending_order_cols:
+    rank_by_metric = df.groupby(['summoner_name'], as_index=False)[chosen_metric].mean().sort_values(by=chosen_metric, ascending=True)
+
 # Title
 column_name = rank_by_metric.columns[1] 
 column_name = column_name.replace('_', ' ').lower()
