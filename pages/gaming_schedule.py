@@ -64,7 +64,7 @@ colors = cmap(np.linspace(0, 1, len(gs_df['summoner_code'].unique())))
 
 # Plot
 fig, ax = plt.subplots()
-scatter = ax.scatter(gs_df['date'], gs_df['hour'], c=gs_df['summoner_code'], cmap='viridis')
+scatter = ax.scatter(gs_df['date'], gs_df['hour'], c=gs_df['summoner_code'], cmap='viridis', alpha=0.5)
 
 # Create legend
 unique_summoners = gs_df[['summoner_code', 'summoner_name']].drop_duplicates().sort_values('summoner_code')
