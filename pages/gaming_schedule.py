@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from datetime import datetime
 
 # Parquet File Path
@@ -78,11 +79,25 @@ else:
 
 ax.legend(handles=handles, title='Summoner Name')
 
-# Set plot labels and title
-ax.set_xlabel('Date')
-ax.set_ylabel('Hour')
-ax.set_title('Gaming Schedule')
-plt.xticks(rotation=90)
+# Create a full date range from min to max date in gs_df
+min_date = gs_df['date'].min()
+max_date = gs_df['date'].max()
+
+# Check for NaT and handle it
+if pd.isna(min_date) or pd.isna(max_date):
+    st.error("No valid date range found in the data.")
+else:
+    full_date_range = pd.date_range(start=min_date, end=max_date, freq='D')
+
+    # Determine date format based on the range
+    if (max_date - min_date).days > 30:
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%b'))
+    else:
+        date_format = '%Y-%m-%d'  # Full date format
+        ax.set_xticks(full_date_range)
+        ax.set_xticklabels(full_date_range.strftime(date_format), rotation=90)
+  
 plt.tight_layout()
 
 # Render the plot with Streamlit
