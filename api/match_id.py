@@ -38,7 +38,7 @@ class MatchID:
         
     def fetch_first_20_match_ids(self):
         # Fetch only the first 100 match IDs
-        start = 0
+        start = 20
         count = 20
         
         self.get_match_ids(start=start, count=count)
