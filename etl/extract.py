@@ -41,6 +41,11 @@ class Extract:
             if match_details:
                 match_details['puuid'] = puuid  # Add PUUID to match details
                 match_details['summoner_name'] = self.game_name
+
+                 # Remove 'missions' from each participant
+                for participant in match_details['info']['participants']:
+                    participant.pop('missions', None)
+
                 match_details_list.append(match_details)
                 self.log.info(f"Fetched details for match_id {match_id} for summoner {self.game_name}")
             else:
