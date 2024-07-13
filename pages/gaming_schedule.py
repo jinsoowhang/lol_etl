@@ -13,6 +13,27 @@ df = pd.read_parquet(parquet_file_path)
 # Copy new dataframe
 gs_df = df.copy()
 
+####################
+####### UDF ########
+####################
+
+# Function to transform time played
+def transform_time_played(df, column):
+    # Convert the column values to minutes
+    total_minutes = round((df[column].sum()) / 60)
+    
+    if total_minutes < 60:
+        return f"{total_minutes} minutes"
+    elif total_minutes < 1440:
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours} hours, {minutes} minutes"
+    else:
+        days = total_minutes // 1440
+        hours = (total_minutes % 1440) // 60
+        minutes = total_minutes % 60
+        return f"{days} days, {hours} hours, {minutes} minutes"
+
 ###########################
 ####### Title Page ########
 ###########################
@@ -53,8 +74,10 @@ gs_df['hour'] = gs_df['game_date'].dt.hour
 gs_df = gs_df[gs_df['summoner_name'].isin(chosen_metric)]
 gs_df = gs_df[(gs_df['date'] >= start_dt) & (gs_df['date'] <= end_dt)]
 
-# Print Total Games Played
-st.markdown(f"#### A total of {len(gs_df)} games were played")
+# Print Total Games Played, Total Time Played
+total_time_played = transform_time_played(gs_df, 'time_played')
+st.markdown(f"#### A total of {len(gs_df)} games were played, equivalent to \n\
+             {total_time_played}")
 
 # Convert 'summoner_name' to categorical codes
 gs_df['summoner_code'] = pd.Categorical(gs_df['summoner_name']).codes
@@ -78,6 +101,7 @@ else:
             for code, name in unique_summoners.itertuples(index=False)]
 
 ax.legend(handles=handles, title='Summoner Name')
+ax.set_ylabel('Time of Day (24hr)')
 
 # Create a full date range from min to max date in gs_df
 min_date = gs_df['date'].min()
