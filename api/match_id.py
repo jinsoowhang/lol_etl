@@ -15,7 +15,7 @@ class MatchID:
         self.match_ids = set()  # Use a set to avoid duplicate match IDs
         self.log = logger('MatchIDLogger').get_logger()
 
-    def get_match_ids(self, start=0, count=20):
+    def get_match_ids(self, start=0, count=10):
         # Adjusted to handle pagination and rate limits
         full_url = f"{GET_MATCH_IDS_BY_PUUID_URL}/{self.puuid}/ids?start={start}&count={count}"
         self.log.info(f"Fetching match IDs from {full_url}")

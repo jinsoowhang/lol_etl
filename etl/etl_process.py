@@ -38,8 +38,12 @@ class ETLProcess:
 
     def process_game(self, game_name):
         # Step 1: Extract data
-        extractor = Extract(game_name, self.tag_line)
-        puuid, match_details_list = extractor.extract_data()
+        if game_name == 'dexter mexter':
+            extractor = Extract(game_name, tag_line='love')
+            puuid, match_details_list = extractor.extract_data()
+        else: 
+            extractor = Extract(game_name, self.tag_line)
+            puuid, match_details_list = extractor.extract_data()
 
         if not puuid:
             self.log.error(f"Failed to get PUUID for {game_name}")
