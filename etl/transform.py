@@ -33,8 +33,8 @@ class DataTransformer():
             return None
         
     def transform_data(self, df):
-        if df['info'].apply(lambda x: x['gameMode'] in ["URF", "NEXUSBLITZ"]).any():
-            self.log.info("Skipping transformation for game modes 'URF' and 'NEXUSBLITZ'")
+        if df['info'].apply(lambda x: x['gameMode'] in ["URF", "NEXUSBLITZ", "STRAWBERRY"]).any():
+            self.log.info("Skipping transformation for game modes 'URF', 'NEXUSBLITZ' and 'Strawberry'")
             return df  # 
 
         # Initialize a list to store the indices
